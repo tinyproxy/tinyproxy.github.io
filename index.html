@@ -80,128 +80,333 @@
 
 <h2>
 <a id="documentation" class="anchor" href="#documentation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Documentation</h2>
-<h4>Name</h4>
-tinyproxy.conf - Tinyproxy HTTP proxy daemon configuration file
-<h4>Description</h4>
-<p>tinyproxy(8) reads its configuration file, typically stored in /etc/tinyproxy/tinyproxy.conf (or passed to Tinyproxy with -c on the command line). This manpage describes the syntax and contents of the configuration file.
-The Tinyproxy configuration file contains key-value pairs, one per line. Lines starting with # and empty lines are comments and are ignored. Keywords are case-insensitive, whereas values are case-sensitive. Values may be enclosed in double-quotes (") if they contain spaces.
-The possible keywords and their descriptions are as follows:</p>
+<h4 id="NAME">NAME</h4>
+
+<p>tinyproxy.conf - Tinyproxy HTTP proxy daemon configuration file</p>
+
+<h4 id="SYNOPSIS">SYNOPSIS</h4>
+
+<p><b>tinyproxy.conf</b></p>
+
+<h4 id="DESCRIPTION">DESCRIPTION</h4>
+
+<p><a href="http://man.he.net/man8/tinyproxy">tinyproxy(8)</a> reads its configuration file, typically stored in `/etc/tinyproxy/tinyproxy.conf` (or passed to Tinyproxy with -c on the command line). This manpage describes the syntax and contents of the configuration file.</p>
+
+<p>The Tinyproxy configuration file contains key-value pairs, one per line. Lines starting with `#` and empty lines are comments and are ignored. Keywords are case-insensitive, whereas values are case-sensitive. Values may be enclosed in double-quotes (&quot;) if they contain spaces.</p>
+
+<p>The possible keywords and their descriptions are as follows:</p>
+
+<dl>
+
+<dt id="User"><b>User</b></dt>
+<dd>
+
+<p>The user which the Tinyproxy process should run as, after the initial port-binding has been done as the `root` user. Either the user name or the UID may be specified.</p>
+
+</dd>
+<dt id="Group"><b>Group</b></dt>
+<dd>
+
+<p>The group which the Tinyproxy process should run as, after the initial port-binding has been done as the `root` user. Either the group name or the GID may be specified.</p>
+
+</dd>
+<dt id="Port"><b>Port</b></dt>
+<dd>
+
+<p>The port which the Tinyproxy service will listen on. If the port is less than 1024, you will need to start the Tinyproxy process as the `root` user.</p>
+
+</dd>
+<dt id="Listen"><b>Listen</b></dt>
+<dd>
+
+<p>By default, Tinyproxy listens for connections on all available interfaces (i.e. it listens on the wildcard address `0.0.0.0`). With this configuration parameter, Tinyproxy can be told to listen only on one specific address.</p>
+
+</dd>
+<dt id="Bind"><b>Bind</b></dt>
+<dd>
+
+<p>This allows you to specify which address Tinyproxy will bind to for outgoing connections to web servers or upstream proxies.</p>
+
+</dd>
+<dt id="BindSame"><b>BindSame</b></dt>
+<dd>
+
+<p>If this boolean parameter is set to `yes`, then Tinyproxy will bind the outgoing connection to the IP address of the incoming connection that triggered the outgoing request.</p>
+
+</dd>
+<dt id="Timeout"><b>Timeout</b></dt>
+<dd>
+
+<p>The maximum number of seconds of inactivity a connection is allowed to have before it is closed by Tinyproxy.</p>
+
+</dd>
+<dt id="ErrorFile"><b>ErrorFile</b></dt>
+<dd>
+
+<p>This parameter controls which HTML file Tinyproxy returns when a given HTTP error occurs. It takes two arguments, the error number and the location of the HTML error file.</p>
+
+</dd>
+<dt id="DefaultErrorFile"><b>DefaultErrorFile</b></dt>
+<dd>
+
+<p>This parameter controls the HTML template file returned when an error occurs for which no specific error file has been set.</p>
+
+</dd>
+<dt id="StatHost"><b>StatHost</b></dt>
+<dd>
+
+<p>This configures the host name or IP address that is treated as the `stat host`: Whenever a request for this host is received, Tinyproxy will return an internal statistics page instead of forwarding the request to that host. The template for this page can be configured with the `StatFile` configuration option. The default value of `StatHost` is `tinyproxy.stats`.</p>
+
+</dd>
+<dt id="StatFile"><b>StatFile</b></dt>
+<dd>
+
+<p>This configures the HTML file that Tinyproxy sends when a request for the stathost is received. If this parameter is not set, Tinyproxy returns a hard-coded basic statistics page. See the STATHOST section in the <a href="http://man.he.net/man8/tinyproxy">tinyproxy(8)</a> manual page for details.</p>
+
+<p>Note that the StatFile and the error files configured with ErrorFile and DefaultErrorFile are template files that can contain a few template variables that Tinyproxy expands prior to delivery. Examples are &quot;{cause}&quot; for an abbreviated error description and &quot;{detail}&quot; for a detailed error message. The <a href="http://man.he.net/man8/tinyproxy">tinyproxy(8)</a> manual page contains a description of all template variables.</p>
+
+</dd>
+<dt id="LogFile"><b>LogFile</b></dt>
+<dd>
+
+<p>This controls the location of the file to which Tinyproxy writes its debug output. Alternatively, Tinyproxy can log to syslog -- see the Syslog option.</p>
+
+</dd>
+<dt id="Syslog"><b>Syslog</b></dt>
+<dd>
+
+<p>When set to `On`, this option tells Tinyproxy to write its debug messages to syslog instead of to a log file configured with `LogFile`. These two options are mutually exclusive.</p>
+
+</dd>
+<dt id="LogLevel"><b>LogLevel</b></dt>
+<dd>
+
+<p>Sets the log level. Messages from the set level and above are logged. For example, if the LogLevel was set to Warning, then all log messages from Warning to Critical would be output, but Notice and below would be suppressed. Allowed values are:</p>
 
 <ul>
-<li><b>User</b><br />
-    The user which the Tinyproxy process should run as, after the initial port-binding has been done as the root user. Either the user name or the UID may be specified.</li>
-<li><b>Group</b><br />
-    The group which the Tinyproxy process should run as, after the initial port-binding has been done as the root user. Either the group name or the GID may be specified.</li>
-<li><b>Port</b><br />
-    The port which the Tinyproxy service will listen on. If the port is less than 1024, you will need to start the Tinyproxy process as the root user.</li>
-<li><b>Listen</b><br />
-    By default, Tinyproxy listens for connections on all available interfaces (i.e. it listens on the wildcard address 0.0.0.0). With this configuration parameter, Tinyproxy can be told to listen only on one specific address.</pi>
-<li><b>Bind</b><br />
-    This allows you to specify which address Tinyproxy will bind to for outgoing connections to web servers or upstream proxies.</li>
-<li><b>BindSame</b><br />
-    If this boolean parameter is set to yes, then Tinyproxy will bind the outgoing connection to the IP address of the incoming connection that triggered the outgoing request.</li>
-<li><b>Timeout</b><br />
-    The maximum number of seconds of inactivity a connection is allowed to have before it is closed by Tinyproxy.<br />
-<li><b>ErrorFile</b><br />
-    This parameter controls which HTML file Tinyproxy returns when a given HTTP error occurs. It takes two arguments, the error number and the location of the HTML error file.</li>
-<li><b>DefaultErrorFile</b><br />
-    This parameter controls the HTML template file returned when an error occurs for which no specific error file has been set.</li>
-<li><b>StatHost</b><br />
-    This configures the host name or IP address that is treated as the stat host: Whenever a request for this host is received, Tinyproxy will return an internal statistics page instead of forwarding the request to that host. The template for this page can be configured with the StatFile configuration option. The default value of StatHost is tinyproxy.stats.</li>
-<li><b>StatFile</b><br />
-    This configures the HTML file that Tinyproxy sends when a request for the stathost is received. If this parameter is not set, Tinyproxy returns a hard-coded basic statistics page. See the STATHOST section in the tinyproxy(8) manual page for details.
 
-    Note that the StatFile and the error files configured with ErrorFile and DefaultErrorFile are template files that can contain a few template variables that Tinyproxy expands prior to delivery. Examples are "{cause}" for an abbreviated error description and "{detail}" for a detailed error message. The tinyproxy(8) manual page contains a description of all template variables.</li>
-<li><b>LogFile</b><br />
-    This controls the location of the file to which Tinyproxy writes its debug output. Alternatively, Tinyproxy can log to syslog - see the Syslog option.</li>
-<li><b>Syslog</b><br />
-    When set to On, this option tells Tinyproxy to write its debug messages to syslog instead of to a log file configured with LogFile. These two options are mutually exclusive.</li>
-<li><b>LogLevel</b><br />
-    Sets the log level. Messages from the set level and above are logged. For example, if the LogLevel was set to Warning, then all log messages from Warning to Critical would be output, but Notice and below would be suppressed. Allowed values are: 
-    <ul>
-    <li>Critical (least verbose)</li>
-    <li>Error</li>
-    <li>Warning</li>
-    <li>Notice</li>
-    <li>Connect (log connections without Info's noise)</li>
-    <li>Info (most verbose)</li>
-    </ul></li>
-<li><b>PidFile</b><br />
-    This option controls the location of the file where the main Tinyproxy process stores its process ID for signaling purposes.</li>
-<li><b>XTinyproxy</b><br />
-    Setting this option to Yes tells Tinyproxy to add a header X-Tinyproxy containing the client's IP address to the request.</li>
-<li><b>Upstream, No Upstream</b><br />
-    This option allows you to set up a set of rules for deciding whether an upstream proxy server is to be used, based on the host or domain of the site being accessed. The rules are stored in the order encountered in the configuration file and the LAST matching rule wins. There are three possible forms for specifying upstream rules: 
-    <ul>
-    <li>upstream host:port turns proxy upstream support on generally.</li>
-    <li>upstream host:port "site_spec" turns on the upstream proxy for the sites matching site_spec.</li>
-    <li>no upstream "site_spec" turns off upstream support for sites matching site_spec.</li></ul>
+<li><p>Critical (least verbose)</p>
 
-    The site can be specified in various forms as a hostname, domain
-    name or as an IP range:
-    <ul>
-    <li>name matches host exactly</li>
-    <li>.name matches any host in domain "name"</li>
-    <li>. matches any host with no domain (in empty domain)</li>
-    <li>IP/bits matches network/mask</li>
-    <li>IP/mask matches network/mask</li>
-    </ul>
-    </li> 
-<li><b>MaxClients</b><br />
-    Tinyproxy creates one child process for each connected client. This options specifies the absolute highest number processes that will be created. With other words, only MaxClients clients can be connected to Tinyproxy simultaneously.</li>
-<li><b>MinSpareServers, MaxSpareServers</b><br />
-    Tinyproxy always keeps a certain number of idle child processes so that it can handle new incoming client requests quickly. MinSpareServer and MaxSpareServers control the lower and upper limits for the number of spare processes. I.e. when the number of spare servers drops below MinSpareServers then Tinyproxy will start forking new spare processes in the background and when the number of spare processes exceeds MaxSpareServers then Tinyproxy will kill off extra processes.</li>
-<li><b>StartServers</b><br />
-    The number of servers to start initially. This should usually be set to a value between MinSpareServers and MaxSpareServers.</li>
-<li><b>MaxRequestsPerChild</b><br />
-    This limits the number of connections that a child process will handle before it is killed. The default value is 0 which disables this feature. This option is meant as an emergency measure in the case of problems with memory leakage. In that case, setting MaxRequestsPerChild to a value of e.g. 1000, or 10000 can be useful.</li>
-<li><b>Allow, Deny</b><br />
-    The Allow and Deny options provide a means to customize which clients are allowed to access Tinyproxy. Allow and Deny lines can be specified multiple times to build the access control list for Tinyproxy. The order in the config file is important. If there are no Allow or Deny lines, then all clients are allowed. Otherwise, the default action is to deny access. The argument to Allow or Deny can be a single IP address of a client host, like 127.0.0.1, an IP address range, like 192.168.0.1/24 or a string that will be matched against the end of the client host name, i.e, this can be a full host name like host.example.com or a domain name like .example.com or even a top level domain name like .com.</li>
-<li><b>AddHeader</b><br />
-    Configure one or more HTTP request headers to be added to outgoing HTTP requests that Tinyproxy makes. Note that this option will not work for HTTPS traffic, as Tinyproxy has no control over what headers are exchanged.
-    <pre>
-    AddHeader "X-My-Header" "Powered by Tinyproxy"</li>
-    </pre>
-<li><b>ViaProxyName</b><br />
-    RFC 2616 requires proxies to add a Via header to the HTTP requests, but using the real host name can be a security concern. If the ViaProxyname option is present, then its string value will be used as the host name in the Via header. Otherwise, the server's host name will be used.</li>
-<li><b>DisableViaHeader</b><br />
-    When this is set to yes, Tinyproxy does NOT add the Via header to the requests. This virtually puts Tinyproxy into stealth mode. Note that RFC 2616 requires proxies to set the Via header, so by enabling this option, you break compliance. Don't disable the Via header unless you know what you are doing...</li>
-<li><b>Filter</b><br />
-    Tinyproxy supports filtering of web sites based on URLs or domains. This option specifies the location of the file containing the filter rules, one rule per line.</li>
-<li><b>FilterURLs</b><br />
-    If this boolean option is set to Yes or On, filtering is performed for URLs rather than for domains. The default is to filter based on domains.</li>
-<li><b>FilterExtended</b><br />
-    If this boolean option is set to Yes, then extended POSIX regular expressions are used for matching the filter rules. The default is to use basic POSIX regular expressions.</li>
-<li><b>FilterCaseSensitive</b><br />
-    If this boolean option is set to Yes, then the filter rules are matched in a case sensitive manner. The default is to match case-insensitively.</li>
-<li><b>FilterDefaultDeny</b><br />
-    The default filtering policy is to allow everything that is not matched by a filtering rule. Setting FilterDefaultDeny to Yes changes the policy do deny everything but the domains or URLs matched by the filtering rules.</li>
-<li><b>Anonymous</b><br />
-    If an Anonymous keyword is present, then anonymous proxying is enabled. The headers listed with Anonymous are allowed through, while all others are denied. If no Anonymous keyword is present, then all headers are allowed through. You must include quotes around the headers.<br />
+</li>
+<li><p>Error</p>
 
-    Most sites require cookies to be enabled for them to work correctly, so you will need to allow cookies through if you access those sites.<br />
+</li>
+<li><p>Warning</p>
 
-    Example:<br />
-    <pre>
-    Anonymous "Host"
-    Anonymous "Authorization"
-    Anonymous "Cookie"</li>
-    </pre>
-<li><b>ConnectPort</b><br />
-    This option can be used to specify the ports allowed for the CONNECT method. If no ConnectPort line is found, then all ports are allowed. To disable CONNECT altogether, include a single ConnectPort line with a value of 0.</li>
-<li><b>ReversePath</b><br />
-    Configure one or more ReversePath directives to enable reverse proxy support. With reverse proxying it's possible to make a number of sites appear as if they were part of a single site.<br />
-    If you uncomment the following two directives and run Tinyproxy on your own computer at port 8888, you can access example.com, using http://localhost:8888/example/.<br />
-    <pre>
-    ReversePath "/example/" "http://www.example.com/"</li>
-    </pre>
-<li><b>ReverseOnly</b><br />
-    When using Tinyproxy as a reverse proxy, it is STRONGLY recommended that the normal proxy is turned off by setting this boolean option to Yes.</li>
-<li><b>ReverseMagic</b><br />
-    Setting this option to Yes, makes Tinyproxy use a cookie to track reverse proxy mappings. If you need to reverse proxy sites which have absolute links you must use this option.</li>
-<li><b>ReverseBaseURL</b><br />
-    The URL that is used to access this reverse proxy. The URL is used to rewrite HTTP redirects so that they won't escape the proxy. If you have a chain of reverse proxies, you'll need to put the outermost URL here (the address which the end user types into his/her browser). If this option is not set then no rewriting of redirects occurs.</li>
+</li>
+<li><p>Notice</p>
+
+</li>
+<li><p>Connect (log connections without Info&#39;s noise)</p>
+
+</li>
+<li><p>Info (most verbose)</p>
+
+</li>
 </ul>
+
+</dd>
+<dt id="PidFile"><b>PidFile</b></dt>
+<dd>
+
+<p>This option controls the location of the file where the main Tinyproxy process stores its process ID for signaling purposes.</p>
+
+</dd>
+<dt id="XTinyproxy"><b>XTinyproxy</b></dt>
+<dd>
+
+<p>Setting this option to `Yes` tells Tinyproxy to add a header `X-Tinyproxy` containing the client&#39;s IP address to the request.</p>
+
+</dd>
+<dt id="Upstream"><b>Upstream</b></dt>
+<dd>
+
+<p>This option allows you to set up a set of rules for deciding whether an upstream proxy server is to be used, based on the host or domain of the site being accessed. The rules are stored in the order encountered in the configuration file and the LAST matching rule wins. The following forms for specifying upstream rules exist:</p>
+
+<ul>
+
+<li><p><i>upstream type host:port</i> turns proxy upstream support on generally.</p>
+
+</li>
+<li><p><i>upstream type user:pass@host:port</i> does the same, but uses the supplied credentials for authentication.</p>
+
+</li>
+<li><p><i>upstream type host:port &quot;site_spec&quot;</i> turns on the upstream proxy for the sites matching `site_spec`.</p>
+
+<p>`type` can be one of `http`, `socks4`, `socks5`, `none`.</p>
+
+</li>
+<li><p><i>upstream none &quot;site_spec&quot;</i> turns off upstream support for sites matching `site_spec`, that means the connection is done directly.</p>
+
+</li>
+</ul>
+
+<p>The site can be specified in various forms as a hostname, domain name or as an IP range:</p>
+
+<ul>
+
+<li><p><i>name</i> matches host exactly</p>
+
+</li>
+<li><p><i>.name</i> matches any host in domain &quot;name&quot;</p>
+
+</li>
+<li><p><i>.</i> matches any host with no domain (in &#39;empty&#39; domain)</p>
+
+</li>
+<li><p><i>IP/bits</i> matches network/mask</p>
+
+</li>
+<li><p><i>IP/mask</i> matches network/mask</p>
+
+</li>
+</ul>
+
+<p>Note that the upstream directive can also be used to null-route a specific target domain/host, e.g.: `upstream http 0.0.0.0:0 &quot;.adserver.com&quot;`</p>
+
+</dd>
+<dt id="MaxClients"><b>MaxClients</b></dt>
+<dd>
+
+<p>Tinyproxy creates one thread for each connected client. This options specifies the absolute highest number processes that will be created. With other words, only MaxClients clients can be connected to Tinyproxy simultaneously.</p>
+
+</dd>
+<dt id="Allow"><b>Allow</b></dt>
+<dd>
+
+</dd>
+<dt id="Deny"><b>Deny</b></dt>
+<dd>
+
+<p>The `Allow` and `Deny` options provide a means to customize which clients are allowed to access Tinyproxy. `Allow` and `Deny` lines can be specified multiple times to build the access control list for Tinyproxy. The order in the config file is important. If there are no `Allow` or `Deny` lines, then all clients are allowed. Otherwise, the default action is to deny access. The argument to `Allow` or `Deny` can be a single IP address of a client host, like `127.0.0.1`, an IP address range, like `192.168.0.1/24` or a string that will be matched against the end of the client host name, i.e, this can be a full host name like `host.example.com` or a domain name like `.example.com` or even a top level domain name like `.com`. Note that by adding a rule using a host or domain name, a costly name lookup has to be done for every new connection, which could slow down the service considerably.</p>
+
+</dd>
+<dt id="BasicAuth"><b>BasicAuth</b></dt>
+<dd>
+
+<p>Configure HTTP &quot;Basic Authentication&quot; username and password for accessing the proxy. If there are any entries specified, access is only granted for authenticated users.</p>
+
+<pre><code>    BasicAuth user password</code></pre>
+
+</dd>
+<dt id="AddHeader"><b>AddHeader</b></dt>
+<dd>
+
+<p>Configure one or more HTTP request headers to be added to outgoing HTTP requests that Tinyproxy makes. Note that this option will not work for HTTPS traffic, as Tinyproxy has no control over what headers are exchanged.</p>
+
+<pre><code>    AddHeader &quot;X-My-Header&quot; &quot;Powered by Tinyproxy&quot;</code></pre>
+
+</dd>
+<dt id="ViaProxyName"><b>ViaProxyName</b></dt>
+<dd>
+
+<p>RFC 2616 requires proxies to add a `Via` header to the HTTP requests, but using the real host name can be a security concern. If the `ViaProxyname` option is present, then its string value will be used as the host name in the Via header. Otherwise, the server&#39;s host name will be used.</p>
+
+</dd>
+<dt id="DisableViaHeader"><b>DisableViaHeader</b></dt>
+<dd>
+
+<p>When this is set to yes, Tinyproxy does NOT add the `Via` header to the requests. This virtually puts Tinyproxy into stealth mode. Note that RFC 2616 requires proxies to set the `Via` header, so by enabling this option, you break compliance. Don&#39;t disable the `Via` header unless you know what you are doing...</p>
+
+</dd>
+<dt id="Filter"><b>Filter</b></dt>
+<dd>
+
+<p>Tinyproxy supports filtering of web sites based on URLs or domains. This option specifies the location of the file containing the filter rules, one rule per line.</p>
+
+<p>Rules are specified as POSIX basic regular expressions (BRE), unless FilterExtended is activated. Comment lines start with a `#` character.</p>
+
+<p>Example filter file contents:</p>
+
+<pre><code> # filter exactly cnn.com
+ ^cnn\.com$
+ 
+ # filter all subdomains of cnn.com, but not cnn.com itself
+ .*\.cnn.com$
+ 
+ # filter any domain that has cnn.com in it, like xcnn.comfy.org
+ cnn\.com
+ 
+ # filter any domain that ends in cnn.com
+ cnn\.com$
+ 
+ # filter any domain that starts with adserver
+ ^adserver</code></pre>
+
+</dd>
+<dt id="FilterURLs"><b>FilterURLs</b></dt>
+<dd>
+
+<p>If this boolean option is set to `Yes` or `On`, filtering is performed for URLs rather than for domains. The default is to filter based on domains.</p>
+
+</dd>
+<dt id="FilterExtended"><b>FilterExtended</b></dt>
+<dd>
+
+<p>If this boolean option is set to `Yes`, then extended POSIX regular expressions are used for matching the filter rules. The default is to use basic POSIX regular expressions.</p>
+
+</dd>
+<dt id="FilterCaseSensitive"><b>FilterCaseSensitive</b></dt>
+<dd>
+
+<p>If this boolean option is set to `Yes`, then the filter rules are matched in a case sensitive manner. The default is to match case-insensitively.</p>
+
+</dd>
+<dt id="FilterDefaultDeny"><b>FilterDefaultDeny</b></dt>
+<dd>
+
+<p>The default filtering policy is to allow everything that is not matched by a filtering rule. Setting `FilterDefaultDeny` to `Yes` changes the policy do deny everything but the domains or URLs matched by the filtering rules.</p>
+
+</dd>
+<dt id="Anonymous"><b>Anonymous</b></dt>
+<dd>
+
+<p>If an `Anonymous` keyword is present, then anonymous proxying is enabled. The headers listed with `Anonymous` are allowed through, while all others are denied. If no Anonymous keyword is present, then all headers are allowed through. You must include quotes around the headers.</p>
+
+<p>Most sites require cookies to be enabled for them to work correctly, so you will need to allow cookies through if you access those sites.</p>
+
+<p>Example:</p>
+
+<pre><code>    Anonymous &quot;Host&quot;
+    Anonymous &quot;Authorization&quot;
+    Anonymous &quot;Cookie&quot;</code></pre>
+
+</dd>
+<dt id="ConnectPort"><b>ConnectPort</b></dt>
+<dd>
+
+<p>This option can be used to specify the ports allowed for the CONNECT method. If no `ConnectPort` line is found, then all ports are allowed. To disable CONNECT altogether, include a single ConnectPort line with a value of `0`.</p>
+
+</dd>
+<dt id="ReversePath"><b>ReversePath</b></dt>
+<dd>
+
+<p>Configure one or more ReversePath directives to enable reverse proxy support. With reverse proxying it&#39;s possible to make a number of sites appear as if they were part of a single site.</p>
+
+<p>If you uncomment the following two directives and run Tinyproxy on your own computer at port 8888, you can access example.com, using http://localhost:8888/example/.</p>
+
+<pre><code>    ReversePath &quot;/example/&quot; &quot;http://www.example.com/&quot;</code></pre>
+
+</dd>
+<dt id="ReverseOnly"><b>ReverseOnly</b></dt>
+<dd>
+
+<p>When using Tinyproxy as a reverse proxy, it is STRONGLY recommended that the normal proxy is turned off by setting this boolean option to `Yes`.</p>
+
+</dd>
+<dt id="ReverseMagic"><b>ReverseMagic</b></dt>
+<dd>
+
+<p>Setting this option to `Yes`, makes Tinyproxy use a cookie to track reverse proxy mappings. If you need to reverse proxy sites which have absolute links you must use this option.</p>
+
+</dd>
+<dt id="ReverseBaseURL"><b>ReverseBaseURL</b></dt>
+<dd>
+
+<p>The URL that is used to access this reverse proxy. The URL is used to rewrite HTTP redirects so that they won&#39;t escape the proxy. If you have a chain of reverse proxies, you&#39;ll need to put the outermost URL here (the address which the end user types into his/her browser). If this option is not set then no rewriting of redirects occurs.</p>
+
+</dd>
+</dl>
 
 <h2>
 <a id="support" class="anchor" href="#support" aria-hidden="true"><span class="octicon octicon-link"></span></a>Support</h2>
