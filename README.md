@@ -1,6 +1,6 @@
 # tinyproxy.github.io
 
-this [website](https://tinyproxy.github.io) is generated from the [tinyproxy repo](://github.com/tinyproxy/tinyproxy):
+this [website](https://tinyproxy.github.io) is generated from the [tinyproxy repo](https://github.com/tinyproxy/tinyproxy):
 
     git clone git://github.com/tinyproxy/tinyproxy
     cd tinyproxy
