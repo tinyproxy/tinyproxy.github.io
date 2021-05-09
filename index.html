@@ -125,7 +125,7 @@
 <dt id="Bind"><b>Bind</b></dt>
 <dd>
 
-<p>This allows you to specify which address Tinyproxy will bind to for outgoing connections to web servers or upstream proxies.</p>
+<p>This allows you to specify which address Tinyproxy will bind to for outgoing connections to web servers or upstream proxies. This parameter may be specified multiple times, then Tinyproxy will try all the specified addresses in order.</p>
 
 </dd>
 <dt id="BindSame"><b>BindSame</b></dt>
@@ -338,6 +338,8 @@
 <dd>
 
 <p>If this boolean option is set to `Yes` or `On`, filtering is performed for URLs rather than for domains. The default is to filter based on domains.</p>
+
+<p>Note that filtering for URLs works only in plain HTTP scenarios. Since HTTPS has become ubiquitous during the last years, this will only work on a tiny fraction of websites, so it is recommended not to use this option.</p>
 
 </dd>
 <dt id="FilterExtended"><b>FilterExtended</b></dt>
